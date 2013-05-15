@@ -90,7 +90,7 @@ def render_snippets(context, request, body):
                 localizer.translate(
                     _("No snippet with name '${name}' registered.",
                       mapping=dict(name=infos['name']))))
-        return result
+        return result.decode('utf8')
 
     return snippet_regexp.sub(sub, body)
 
