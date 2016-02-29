@@ -91,8 +91,10 @@ def render_snippets(context, request, body):
                     _("No snippet with name '${name}' registered.",
                       mapping=dict(name=infos['name']))))
         return result.decode('utf8')
-
-    return snippet_regexp.sub(sub, body)
+    try:
+        return snippet_regexp.sub(sub, body)
+    except:
+        return body
 
 
 def get_snippets(context, request):
