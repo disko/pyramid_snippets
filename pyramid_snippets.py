@@ -80,6 +80,7 @@ def render_snippets(context, request, body):
             request.path + '/snippet-%s' % infos['name'],
             base_url=request.application_url,
             POST=urllib.urlencode(arguments),
+            query_string=urllib.urlencode(arguments),
             referrer=request.url,
             headers=request.headers)
         snippet_request.registry = request.registry
