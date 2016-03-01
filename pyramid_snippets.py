@@ -1,7 +1,7 @@
 from pyramid.exceptions import ConfigurationError
 from pyramid.i18n import TranslationStringFactory, get_localizer
 from pyramid.interfaces import IRequest, IRouteRequest
-from pyramid.request import Request
+from kotti.request import Request
 from pyramid.view import render_view
 from zope.interface import Interface, implementedBy, providedBy
 import re
@@ -79,12 +79,11 @@ def render_snippets(context, request, body):
         snippet_request = Request.blank(
             request.path + '/snippet-%s' % infos['name'],
             base_url=request.application_url,
-            POST=urllib.urlencode(arguments))
+            POST=urllib.urlencode(arguments),
+            referrer=request.url,
+            headers=request.headers)
         snippet_request.registry = request.registry
-        result = render_view(
-            context,
-            snippet_request,
-            'snippet-%s' % infos['name'])
+        result = render_view(context, snippet_request, 'snippet-%s' % infos['name'])
         if result is None:
             return '<div class="alert alert-error">{0}</div>'.format(
                 localizer.translate(
@@ -93,7 +92,7 @@ def render_snippets(context, request, body):
         return result.decode('utf8')
     try:
         return snippet_regexp.sub(sub, body)
-    except:
+    except Exception as e:
         return body
 
 
